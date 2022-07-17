@@ -1,28 +1,52 @@
-from email import message
-from mimetypes import types_map
-from msilib.schema import AdminExecuteSequence
-from pyexpat import model
-import re
-from subprocess import call
+import json
+import os
+
 import telebot
+import ssl
 from telebot import types
+from flask import Flask, request
 
+mol = 1
+qoy = 1
+tovuq = 1
+bugdoy = 100
+tanga = 100
+olmos = 0
 
+token = "5479511126:AAE0fRbBFcKKN5bJF8H-m73FKqEe5oVdRck"
 bot = telebot.TeleBot("5479511126:AAE0fRbBFcKKN5bJF8H-m73FKqEe5oVdRck", parse_mode=None)
+app_url = f"https://rpgxo.herokuapp.com/{token}"
+server = Flask(__name__)
+
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    global bugdoy
-    global mol
-    global qoy
-    global tovuq 
-    tanga = 100
-    olmos = 0
-    
-    mol = 1
-    qoy = 1
-    tovuq = 1
-    bugdoy = 100
+    bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
+
+
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def echo(message):
+    bot.reply_to(message, message.text)
+
+@server.route('/' + token, methods = ['POST'])
+def get_message():
+    json_string = request.get_data().decode('utf-8')
+    update = telebot.types.Update.de_json(json_string)
+    bot .process_new_updates([update])
+    return '!', 200
+
+@server.route('/')
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url=app_url)
+    return '!', 200
+
+if __name__ == "__main__":
+    server.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
+@bot.message_handler(commands=['start'])
+def start(message):
+
     
     menu_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     ferma = types.KeyboardButton("Ferma🏡")
@@ -59,10 +83,9 @@ def menu(message):
 @bot.callback_query_handler(func=lambda call:True)
 def callback(call):
     global mol
-    mol = 1
-    qoy = 1
-    tovuq = 1
-    bugdoy = 100
+    global qoy
+    global tovuq
+    global bugdoy
     hayvonlar_menu = types.InlineKeyboardMarkup(row_width=2)
     boqish = types.InlineKeyboardButton("Boqish🌾", callback_data="boqish")
     hosil = types.InlineKeyboardButton("Hosil olish🥩", callback_data="hosil")
