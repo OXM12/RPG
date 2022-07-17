@@ -18,12 +18,6 @@ bot = telebot.TeleBot("5479511126:AAE0fRbBFcKKN5bJF8H-m73FKqEe5oVdRck", parse_mo
 app_url = f"https://rpgxo.herokuapp.com/{token}"
 server = Flask(__name__)
 
-
-@bot.message_handler(commands=['star'])
-def start(message):
-    bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
-
-
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo(message):
     bot.reply_to(message, message.text)
