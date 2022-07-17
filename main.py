@@ -19,7 +19,7 @@ app_url = f"https://rpgxo.herokuapp.com/{token}"
 server = Flask(__name__)
 
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['star'])
 def start(message):
     bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
 
