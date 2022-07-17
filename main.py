@@ -47,7 +47,6 @@ if __name__ == "__main__":
 @bot.message_handler(commands=['start'])
 def start(message):
 
-    
     menu_button = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     ferma = types.KeyboardButton("Ferma🏡")
     bozor = types.KeyboardButton("Bozor💰")
